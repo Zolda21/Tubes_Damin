@@ -7,56 +7,56 @@ import numpy as np # Pastikan numpy diimpor jika belum
 
 def show_data_preprocessing():
     # === CSS Styling (sama seperti sebelumnya) ===
-    st.markdown("""
-        <style>
-            .main-title {
-                text-align: center;
-                font-size: 2.3em;
-                font-weight: bold;
-                color: #2c3e50;
-                margin-bottom: 10px;
-            }
-            .subtitle {
-                text-align: center;
-                font-size: 1.4em;
-                color: #3498db;
-                margin-top: -10px;
-                margin-bottom: 30px;
-            }
-            .section-header {
-                font-size: 1.4em;
-                font-weight: 600;
-                color: #3498db;
-                margin-top: 25px;
-                margin-bottom: 10px;
-            }
-            .info-box {
-                background-color: #f5f7fa;
-                color: #2c3e50;
-                padding: 16px;
-                border-left: 6px solid #3498db;
-                border-radius: 10px;
-                margin-bottom: 20px;
-                box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-                font-size: 1.05em;
-            }
-            .highlight-text { /* Gaya baru untuk teks penting */
-                background-color: #e8f3f8;
-                padding: 10px;
-                border-radius: 8px;
-                font-weight: bold;
-                color: #1f618d;
-            }
-            .code-block {
-                background-color: #eeeeee;
-                padding: 10px;
-                border-radius: 5px;
-                font-family: monospace;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+            .main-title {
+                text-align: center;
+                font-size: 2.3em;
+                font-weight: bold;
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+            .subtitle {
+                text-align: center;
+                font-size: 1.4em;
+                color: #3498db;
+                margin-top: -10px;
+                margin-bottom: 30px;
+            }
+            .section-header {
+                font-size: 1.4em;
+                font-weight: 600;
+                color: #3498db;
+                margin-top: 25px;
+                margin-bottom: 10px;
+            }
+            .info-box {
+                background-color: #f5f7fa;
+                color: #2c3e50;
+                padding: 16px;
+                border-left: 6px solid #3498db;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+                font-size: 1.05em;
+            }
+            .highlight-text { /* Gaya baru untuk teks penting */
+                background-color: #e8f3f8;
+                padding: 10px;
+                border-radius: 8px;
+                font-weight: bold;
+                color: #1f618d;
+            }
+            .code-block {
+                background-color: #eeeeee;
+                padding: 10px;
+                border-radius: 5px;
+                font-family: monospace;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
     # === Judul dan Subjudul ===
     st.markdown('<div class="main-title">🛠️ DATA PREPROCESSING 🛠️</div>', unsafe_allow_html=True)
