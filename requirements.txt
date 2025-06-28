@@ -6,4 +6,3 @@ Pillow
 numpy
 joblib
 scikit-learn
-pickle
