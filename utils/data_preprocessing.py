@@ -150,26 +150,50 @@ def show_data_preprocessing():
         """, unsafe_allow_html=True)
 
     elif preprocessing_type == "Unsupervised Processing":
-        st.markdown('<div class="section-header">Unsupervised Processing (Untuk Model Segmentasi Klaster)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header" style="font-size: 2em; font-weight: bold; color: #4CAF50; margin-top: 1em; margin-bottom: 0.5em;">Unsupervised Processing (Untuk Model Segmentasi Klaster)</div>', unsafe_allow_html=True)
         st.markdown("""
-        <div class="info-box">
-            Untuk model <b>Unsupervised Learning</b> (seperti K-Means Clustering) yang bertujuan menemukan pola tersembunyi atau mengelompokkan data tanpa label target, data juga memerlukan persiapan khusus.
+        <div style="background-color: #e0f7fa; padding: 15px; border-radius: 8px; border-left: 5px solid #00BCD4; margin-bottom: 1em;">
+            Setelah <b>Base Processing</b>, data disiapkan secara khusus untuk model <b>Unsupervised Learning</b>, khususnya untuk <b>segmentasi klaster kendaraan</b>. Tahap ini berfokus pada fitur-fitur yang paling relevan untuk menemukan pola tersembunyi dalam data tanpa label target.
         </div>
         """, unsafe_allow_html=True)
         st.markdown("""
-        Langkah-langkah yang diterapkan pada dataset penjualan mobil bekas:
-        <ul>
-            <li><b>Seleksi Fitur Spesifik:</b> Hanya subset fitur yang relevan untuk tujuan *clustering* yang dipilih (misalnya <code>'mmr'</code>, <code>'sellingprice'</code>, <code>'year'</code>, <code>'odometer'</code>, <code>'condition'</code>, <code>'body'</code>, <code>'make'</code>). Ini mengurangi *noise* dan fokus pada karakteristik utama kendaraan.</li>
-            <li><b>Pengelompokan Kategori Langka yang Agresif:</b> Mirip dengan Supervised Processing, kategori-kategori yang jarang muncul pada kolom kategorikal terpilih (<code>'make'</code>, <code>'body'</code>) dikelompokkan untuk mengurangi dimensi setelah One-Hot Encoding.</li>
-            <li><b>One-Hot Encoding:</b> Mengubah kolom kategorikal yang telah dikelompokkan (<code>'body'</code>, <code>'make'</code>) menjadi representasi biner.</li>
-            <li><b>Standard Scaling:</b> Menormalisasi semua fitur numerik terpilih (<code>'mmr'</code>, <code>'sellingprice'</code>, <code>'year'</code>, <code>'odometer'</code>, <code>'condition'</code>) agar memiliki skala yang seragam. Ini sangat penting untuk algoritma berbasis jarak seperti K-Means.</li>
-            <li><b>Optimasi Tipe Data:</b> Sama seperti pada tahapan sebelumnya, tipe data numerik yang dihasilkan dioptimalkan menjadi <code>float32</code> untuk mengurangi ukuran file dan memori, membuat data lebih efisien untuk proses *clustering*.</li>
-            <li><b>Tanpa Label Encoding atau PCA:</b> Pada tahap ini, Label Encoding tidak diperlukan karena tidak ada label target. Penggunaan PCA (Principal Component Analysis) juga secara umum dihindari di sini untuk mempertahankan interpretasi fitur asli dalam hasil klaster, meskipun PCA dapat dipertimbangkan jika dimensi setelah OHE masih terlalu tinggi dan memengaruhi kinerja clustering atau visualisasi.</li>
-        </ul>
+        <div style="background-color: #f0f4c3; padding: 15px; border-radius: 8px; margin-bottom: 1em;">
+            Langkah-langkah utama yang dilakukan:
+            <ul>
+                <li><b>Pemuatan Data Dasar:</b> Dataset yang telah melalui *Base Processing* (<code>base_processed_data.csv</code>) dimuat sebagai input.</li>
+                <li><b>Seleksi Fitur untuk Klastering:</b> Hanya fitur-fitur yang paling relevan untuk tujuan segmentasi klaster yang dipilih. Berdasarkan analisis, fitur-fitur ini meliputi <code>'mmr'</code>, <code>'sellingprice'</code>, <code>'year'</code>, <code>'odometer'</code>, <code>'condition'</code>, <code>'body'</code>, dan <code>'make'</code>. Perlu dicatat bahwa <code>'sellingprice'</code> di sini diperlakukan sebagai fitur input untuk klastering, bukan sebagai target.</li>
+                <li><b>Pengelompokan Kategori Langka (Lebih Agresif):</b> Untuk kolom kategorikal yang dipilih (<code>'make'</code>, <code>'body'</code>), kategori yang jarang muncul dikelompokkan secara lebih agresif ke dalam kategori 'Other_kolom_nama'. Ini bertujuan untuk mengurangi dimensi fitur yang dihasilkan setelah One-Hot Encoding, yang penting untuk efisiensi model unsupervised seperti K-Means.</li>
+                <li><b>Column Transformation:</b> Sebuah <code>ColumnTransformer</code> dibangun untuk menerapkan transformasi berbeda pada jenis kolom yang berbeda dalam fitur-fitur yang dipilih:
+                    <ul>
+                        <li><b>Standard Scaling:</b> Kolom numerik yang dipilih (<code>'mmr'</code>, <code>'sellingprice'</code>, <code>'year'</code>, <code>'odometer'</code>, <code>'condition'</code>) dinormalisasi menggunakan <code>StandardScaler</code> untuk menstandarkan skala fitur.</li>
+                        <li><b>One-Hot Encoding:</b> Kolom kategorikal yang dipilih (<code>'body'</code>, <code>'make'</code>) diubah menjadi representasi biner menggunakan <code>OneHotEncoder</code> (dengan <code>handle_unknown='ignore'</code> dan <code>drop='first'</code>).</li>
+                    </ul>
+                </li>
+                <li><b>Optimasi Tipe Data:</b> Tipe data dari kolom-kolom dalam DataFrame yang telah diproses dioptimalkan menjadi representasi yang lebih hemat memori (<code>float32</code> atau integer yang lebih kecil jika memungkinkan).</li>
+                <li><b>Penyimpanan Hasil:</b>
+                    <ul>
+                        <li>DataFrame fitur yang telah diproses disimpan ke <code>unsupervised_ready_data.csv</code>.</li>
+                        <li>Objek <code>ColumnTransformer</code> (<code>preprocessor_unsupervised</code>) yang digunakan disimpan ke <code>preprocessor_unsupervised.pkl</code>. Ini penting agar transformasi yang sama dapat diterapkan pada data baru saat melakukan inferensi klaster.</li>
+                    </ul>
+                </li>
+            </ul>
+            <br>
+            <h4>Pustaka Python yang Digunakan:</h4>
+            <ul>
+                <li><code><b>pandas</b></code>: Untuk manipulasi dan analisis data.</li>
+                <li><code><b>numpy</b></code>: Untuk operasi numerik.</li>
+                <li><code><b>sklearn.preprocessing.StandardScaler</b></code>: Untuk menstandarkan fitur numerik.</li>
+                <li><code><b>sklearn.preprocessing.OneHotEncoder</b></code>: Untuk mengubah fitur kategorikal ke representasi one-hot.</li>
+                <li><code><b>sklearn.compose.ColumnTransformer</b></code>: Untuk menerapkan berbagai transformasi ke kolom yang berbeda.</li>
+                <li><code><b>sklearn.pipeline.Pipeline</b></code>: Untuk mengurutkan langkah-langkah transformasi (meskipun tidak secara eksplisit digunakan di ColumnTransformer, ia adalah bagian dari ekosistem `sklearn`).</li>
+                <li><code><b>joblib</b></code>: Untuk menyimpan dan memuat objek Python (seperti preprocessor).</li>
+                <li><code><b>sys</b></code>: Digunakan untuk mendapatkan informasi lingkungan Python (opsional, untuk debugging).</li>
+            </ul>
+        </div>
         """, unsafe_allow_html=True)
         st.markdown("""
-        <div class="highlight-text">
-            Tujuan dari <b>Unsupervised Processing</b> adalah menyediakan data yang bersih, diskalakan, dan dengan dimensi yang terkontrol, sehingga algoritma *clustering* dapat mengidentifikasi kelompok-kelompok yang bermakna secara efektif dan efisien, menghasilkan *insight* pasar yang berguna.
+        <div style="background-color: #d4edda; padding: 15px; border-radius: 8px; border-left: 5px solid #28a745; font-weight: bold;">
+            Hasil dari <b>Unsupervised Processing</b> adalah dataset yang siap digunakan untuk melatih model klastering, serta objek transformasi yang dapat digunakan kembali untuk data baru.
         </div>
         """, unsafe_allow_html=True)
 
