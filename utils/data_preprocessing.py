@@ -113,24 +113,38 @@ def show_data_preprocessing():
         """, unsafe_allow_html=True)
 
     elif preprocessing_type == "Supervised Processing":
-        st.markdown('<div class="section-header">Supervised Processing (Untuk Model Prediksi Harga)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header" style="font-size: 2em; font-weight: bold; color: #4CAF50; margin-top: 1em; margin-bottom: 0.5em;">Supervised Processing (Untuk Model Prediksi Harga)</div>', unsafe_allow_html=True)
         st.markdown("""
-        <div class="info-box">
+        <div style="background-color: #e0f7fa; padding: 15px; border-radius: 8px; border-left: 5px solid #00BCD4; margin-bottom: 1em;">
             Setelah <b>Base Processing</b>, data disiapkan secara khusus untuk model <b>Supervised Learning</b> yang bertujuan memprediksi <b>harga jual mobil</b>. Proses ini fokus pada transformasi fitur agar optimal untuk algoritma regresi, sekaligus menjaga ukuran model tetap ringkas.
         </div>
         """, unsafe_allow_html=True)
         st.markdown("""
-        Langkah-langkah utama yang dilakukan:
-        <ul>
-            <li><b>Pengelompokan Kategori Langka:</b> Kolom kategorikal dengan kardinalitas sangat tinggi (seperti <code>'model'</code>, <code>'trim'</code>, <code>'seller'</code>) dikelompokkan. Nilai-nilai yang sangat jarang muncul digabungkan ke dalam kategori 'Other'. Ini secara drastis mengurangi jumlah kolom yang dihasilkan setelah One-Hot Encoding dan sangat krusial untuk menjaga ukuran model Random Forest tetap kecil (dari GB menjadi MB).</li>
-            <li><b>Label Encoding:</b> Kolom kategorikal yang sudah dikelompokkan (<code>'model'</code>, <code>'trim'</code>, <code>'seller'</code>) diubah menjadi representasi numerik ordinal. Ini cocok untuk fitur dengan urutan implisit atau saat ingin menjaga dimensi lebih rendah dari One-Hot Encoding.</li>
-            <li><b>One-Hot Encoding:</b> Kolom kategorikal dengan kardinalitas rendah hingga sedang (misalnya <code>'make'</code>, <code>'body'</code>, <code>'transmission'</code>, <code>'state'</code>, <code>'color'</code>, <code>'interior'</code>) diubah menjadi fitur biner.</li>
-            <li><b>Standard Scaling:</b> Semua fitur numerik (termasuk hasil Label Encoding dan fitur asli seperti <code>'mmr'</code>, <code>'odometer'</code>, <code>'condition'</code>, <code>'year'</code>) dinormalisasi agar memiliki rata-rata nol dan variansi satu. Ini penting untuk algoritma yang sensitif terhadap skala fitur.</li>
-            <li><b>Optimasi Tipe Data:</b> Menyesuaikan kembali tipe data kolom numerik yang telah diproses menjadi representasi yang lebih hemat memori (<code>float32</code>).</li>
-        </ul>
+        <div style="background-color: #f0f4c3; padding: 15px; border-radius: 8px; margin-bottom: 1em;">
+            Langkah-langkah utama yang dilakukan:
+            <ul>
+                <li><b>Pengelompokan Kategori Langka:</b> Kolom kategorikal dengan kardinalitas sangat tinggi (seperti <code>'model'</code>, <code>'trim'</code>, <code>'seller'</code>) dikelompokkan. Nilai-nilai yang sangat jarang muncul digabungkan ke dalam kategori 'Other'. Ini secara drastis mengurangi jumlah kolom yang dihasilkan setelah One-Hot Encoding dan sangat krusial untuk menjaga ukuran model Random Forest tetap kecil (dari GB menjadi MB).</li>
+                <li><b>Label Encoding:</b> Kolom kategorikal yang sudah dikelompokkan (<code>'model'</code>, <code>'trim'</code>, <code>'seller'</code>) diubah menjadi representasi numerik ordinal. Ini cocok untuk fitur dengan urutan implisit atau saat ingin menjaga dimensi lebih rendah dari One-Hot Encoding.</li>
+                <li><b>One-Hot Encoding:</b> Kolom kategorikal dengan kardinalitas rendah hingga sedang (misalnya <code>'make'</code>, <code>'body'</code>, <code>'transmission'</code>, <code>'state'</code>, <code>'color'</code>, <code>'interior'</code>) diubah menjadi fitur biner.</li>
+                <li><b>Standard Scaling:</b> Semua fitur numerik (termasuk hasil Label Encoding dan fitur asli seperti <code>'mmr'</code>, <code>'odometer'</code>, <code>'condition'</code>, <code>'year'</code>) dinormalisasi agar memiliki rata-rata nol dan variansi satu. Ini penting untuk algoritma yang sensitif terhadap skala fitur.</li>
+                <li><b>Optimasi Tipe Data:</b> Menyesuaikan kembali tipe data kolom numerik yang telah diproses menjadi representasi yang lebih hemat memori (<code>float32</code>).</li>
+            </ul>
+            <br>
+            <h4>Pustaka Python yang Digunakan:</h4>
+            <ul>
+                <li><code><b>pandas</b></code>: Untuk manipulasi dan analisis data.</li>
+                <li><code><b>numpy</b></code>: Untuk operasi numerik.</li>
+                <li><code><b>sklearn.preprocessing.LabelEncoder</b></code>: Untuk mengonversi label kategorikal ke numerik.</li>
+                <li><code><b>sklearn.preprocessing.StandardScaler</b></code>: Untuk menstandarkan fitur numerik.</li>
+                <li><code><b>sklearn.preprocessing.OneHotEncoder</b></code>: Untuk mengubah fitur kategorikal ke representasi one-hot.</li>
+                <li><code><b>sklearn.compose.ColumnTransformer</b></code>: Untuk menerapkan berbagai transformasi ke kolom yang berbeda.</li>
+                <li><code><b>sklearn.pipeline.Pipeline</b></code>: Untuk mengurutkan langkah-langkah transformasi.</li>
+                <li><code><b>joblib</b></code>: Untuk menyimpan dan memuat objek Python (seperti preprocessor).</li>
+            </ul>
+        </div>
         """, unsafe_allow_html=True)
         st.markdown("""
-        <div class="highlight-text">
+        <div style="background-color: #d4edda; padding: 15px; border-radius: 8px; border-left: 5px solid #28a745; font-weight: bold;">
             Fokus utama pada tahap ini adalah <b>reduksi dimensi cerdas</b> (melalui pengelompokan kategori dan pemilihan encoding) dan <b>optimasi tipe data</b>. Strategi ini terbukti efektif dalam menghasilkan model Supervised (Random Forest Regressor) yang sangat ringkas, berubah dari ukuran gigabyte menjadi hanya belasan megabyte, tanpa mengorbankan performa secara signifikan.
         </div>
         """, unsafe_allow_html=True)
