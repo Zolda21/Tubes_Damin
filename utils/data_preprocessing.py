@@ -78,27 +78,36 @@ def show_data_preprocessing():
 
     # === Konten Berdasarkan Pilihan Dropdown ===
     if preprocessing_type == "Base Processing":
-        st.markdown('<div class="section-header">Base Processing (Pemrosesan Dasar)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header" style="font-size: 2em; font-weight: bold; color: #4CAF50; margin-top: 1em; margin-bottom: 0.5em;">Base Processing (Pemrosesan Dasar)</div>', unsafe_allow_html=True)
         st.markdown("""
-        <div class="info-box">
+        <div style="background-color: #e0f7fa; padding: 15px; border-radius: 8px; border-left: 5px solid #00BCD4; margin-bottom: 1em;">
             <b>Base Processing</b> adalah langkah awal yang fundamental untuk membersihkan dan mempersiapkan dataset mentah. Tujuannya adalah menangani inkonsistensi, nilai yang hilang, dan format yang tidak sesuai, sehingga data menjadi bersih dan terstruktur untuk analisis lebih lanjut.
         </div>
         """, unsafe_allow_html=True)
         st.markdown("""
-        Tahapan ini mencakup operasi kunci yang diterapkan pada dataset penjualan mobil bekas:
-        <ul>
-            <li><b>Pemuatan Data:</b> Dataset mentah dimuat dari file CSV.</li>
-            <li><b>Penghapusan Kolom Tidak Relevan:</b> Kolom <code>'vin'</code> (Vehicle Identification Number) dan <code>'saledate'</code> dihapus karena dianggap tidak relevan secara langsung untuk tujuan prediksi harga atau segmentasi, dan juga untuk mengurangi dimensi data awal.</li>
-            <li><b>Imputasi Nilai Hilang:</b>
-                <ul>
-                    <li>Untuk kolom numerik (seperti <code>'condition'</code>, <code>'odometer'</code>, <code>'mmr'</code>, <code>'sellingprice'</code>, <code>'year'</code>), nilai yang hilang diisi menggunakan <b>median</b> dari kolom tersebut.</li>
-                    <li>Untuk kolom kategorikal (seperti <code>'make'</code>, <code>'model'</code>, <code>'trim'</code>, <code>'body'</code>, <code>'transmission'</code>, <code>'state'</code>, <code>'color'</code>, <code>'interior'</code>, <code>'seller'</code>), nilai yang hilang diisi menggunakan <b>modus (nilai paling sering muncul)</b> dari kolom tersebut.</li>
-                </ul>
-            </li>
-        </ul>
+        <div style="background-color: #f0f4c3; padding: 15px; border-radius: 8px; margin-bottom: 1em;">
+            Tahapan ini mencakup operasi kunci yang diterapkan pada dataset penjualan mobil bekas:
+            <ul>
+                <li><b>Pemuatan Data:</b> Dataset mentah dimuat dari file CSV.</li>
+                <li><b>Penghapusan Kolom Tidak Relevan:</b> Kolom <code>'vin'</code> (Vehicle Identification Number) dan <code>'saledate'</code> dihapus karena dianggap tidak relevan secara langsung untuk tujuan prediksi harga atau segmentasi, dan juga untuk mengurangi dimensi data awal.</li>
+                <li><b>Imputasi Nilai Hilang:</b>
+                    <ul>
+                        <li>Untuk kolom numerik (seperti <code>'condition'</code>, <code>'odometer'</code>, <code>'mmr'</code>, <code>'sellingprice'</code>, <code>'year'</code>), nilai yang hilang diisi menggunakan <b>median</b> dari kolom tersebut.</li>
+                        <li>Untuk kolom kategorikal (seperti <code>'make'</code>, <code>'model'</code>, <code>'trim'</code>, <code>'body'</code>, <code>'transmission'</code>, <code>'state'</code>, <code>'color'</code>, <code>'interior'</code>, <code>'seller'</code>), nilai yang hilang diisi menggunakan <b>modus (nilai paling sering muncul)</b> dari kolom tersebut.</li>
+                    </ul>
+                </li>
+            </ul>
+            <br>
+            <h4>Pustaka Python yang Digunakan:</h4>
+            <ul>
+                <li><code><b>pandas</b></code>: Untuk manipulasi dan analisis data (memuat CSV, menghapus kolom, menangani DataFrame).</li>
+                <li><code><b>numpy</b></code>: Digunakan bersama pandas untuk operasi numerik, terutama dalam mengidentifikasi kolom numerik dan kategorikal.</li>
+                <li><code><b>sklearn.impute.SimpleImputer</b></code>: Untuk mengisi nilai-nilai yang hilang (strategi median dan modus).</li>
+            </ul>
+        </div>
         """, unsafe_allow_html=True)
         st.markdown("""
-        <div class="highlight-text">
+        <div style="background-color: #d4edda; padding: 15px; border-radius: 8px; border-left: 5px solid #28a745; font-weight: bold;">
             Hasil dari <b>Base Processing</b> adalah dataset yang bersih dari nilai hilang, dengan kolom-kolom yang relevan, dan siap untuk diproses lebih lanjut pada tahapan Supervised atau Unsupervised Processing.
         </div>
         """, unsafe_allow_html=True)
